@@ -29,10 +29,22 @@ objects:
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
+    name: ${SONARQUBE_SERVICE_NAME}-data-volume
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    storageClassName: managed-nfs-storage
+    resources:
+      requests:
+        storage: ${DATA_VOLUME_CAPACITY}
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
     name: ${SONARQUBE_SERVICE_NAME}-data
   spec:
     accessModes:
     - ReadWriteOnce
+    storageClassName: managed-nfs-storage
     resources:
       requests:
         storage: ${DATA_VOLUME_CAPACITY}
@@ -43,6 +55,18 @@ objects:
   spec:
     accessModes:
     - ReadWriteOnce
+    storageClassName: managed-nfs-storage
+    resources:
+      requests:
+        storage: ${DATA_VOLUME_CAPACITY}
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: ${SONARQUBE_SERVICE_NAME}-extensions-volume
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    storageClassName: managed-nfs-storage
     resources:
       requests:
         storage: ${EXTENSIONS_VOLUME_CAPACITY}
@@ -72,7 +96,7 @@ objects:
             value: ${POSTGRESQL_PASSWORD}
           - name: SONARQUBE_JDBC_URL
             value: jdbc:postgresql://${SONARQUBE_SERVICE_NAME}-postgresql:5432/sonarqube
-          image: 'registry.centos.org/rhsyseng/sonarqube:latest '
+          image: 'registry.ixpress.icicibank.com:5000/sonarqube:latest'
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9000
@@ -168,10 +192,11 @@ objects:
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    name: ${SONARQUBE_SERVICE_NAME}-postgresql
+    name: ${SONARQUBE_SERVICE_NAME}-postgresql-volume
   spec:
     accessModes:
     - ReadWriteOnce
+    storageClassName: managed-nfs-storage
     resources:
       requests:
         storage: ${POSTGRESQL_VOLUME_CAPACITY}

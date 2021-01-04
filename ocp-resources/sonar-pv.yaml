@@ -12,13 +12,11 @@
         }
       },
       "spec": {
-        "capacity": {
-            "storage": "256Mi"
+        "resources": {
+            "requests": {
+              "storage": { "1Gi" }
           },
-        "accessModes": [ "ReadWriteOnce" ],
-        "hostPath": {
-          "path": "/var/export/sonar-data-vol"
-        }
+        "accessModes": [ "ReadWriteOnce" ]
       }
     },
     {
@@ -31,14 +29,12 @@
         }
       },
       "spec": {
-        "capacity": {
-            "storage": "256Mi"
+           "resources": {
+            "requests": {
+              "storage": { "1Gi" }
           },
         "accessModes": [ "ReadWriteOnce" ],
-        "storageClassName": [ "managed-nfs-storage" ],
-        "hostPath": {
-          "path": "/var/export/sonar-extensions-vol"
-        }
+        "storageClassName": [ "managed-nfs-storage" ]
       }
     }
   ]
