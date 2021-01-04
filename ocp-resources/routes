@@ -1,0 +1,6 @@
+apicurio-studio-api   apicurio-studio-api.apps.nonprod.iciciltd.com             apicurio-studio-api   <all>                   None
+apicurio-studio-ui    apicurio-studio.apps.nonprod.iciciltd.com                 apicurio-studio-ui    <all>                   None
+apicurio-studio-ws    apicurio-studio-ws.apps.nonprod.iciciltd.com              apicurio-studio-ws    <all>                   None
+keycloak              keycloak.apps.nonprod.iciciltd.com                        keycloak              <all>                   None
+microcks              microck.apps.nonprod.iciciltd.com                         microcks              spring                  None
+sonar                 sonar-bharathi-temp.apps.nonprod.iciciltd.com
