@@ -12,6 +12,7 @@
         "storage": "1Gi"
       },
     "accessModes": [ "ReadWriteOnce" ],
+    "storageClassName": [ "managed-nfs-storage" ],
     "hostPath": {
       "path": "/var/export/postgresql-vol"
     }
