@@ -1,0 +1,10 @@
+oc delete routes sonarqube
+oc delete dc sonar
+oc delete svc sonar
+oc delete svc sonar-postgresql
+oc delete pvc sonar-postgresql
+oc delete secret sonar-postgresql
+oc delete serviceaccount sonar
+oc delete pvc sonar-data sonar-extensions sonar-data-volume sonar-extensions-volume sonar-postgresql-volume postgresql-sonarqube-data sonarqube-data sonarqube-extensions sonarqube-logs sonarqube-temp 
+oc delete dc sonar-postgresql
+oc delete all -l app=sonarqube
