@@ -23,6 +23,7 @@ objects:
       template.openshift.io/expose-uri: http://{.spec.host}{.spec.path}
     name: ${SONARQUBE_SERVICE_NAME}
   spec:
+    host: sonarqube.apps.nonprod.iciciltd.com
     to:
       kind: Service
       name: ${SONARQUBE_SERVICE_NAME}
