@@ -45,7 +45,7 @@ objects:
       spec:
         containers:
         - capabilities: {}
-          image: 'registry.centos.org/rhsyseng/sonarqube:latest'
+          image: 'registry.ixpress.icicibank.com:5000/sonarqube:latest'
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9000
@@ -98,5 +98,4 @@ parameters:
 - description: SonarQube container memory limits.
   displayName: Memory Limits
   name: SONARQUBE_MEMORY_LIMITS
-  required: true
-  value: 2Gi
+  value: 3Gi
