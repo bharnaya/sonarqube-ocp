@@ -50,7 +50,7 @@ objects:
         tags: sonarqube
       from:
         kind: DockerImage
-        name: openshiftdemos/sonarqube:${SONARQUBE_VERSION}
+        name: registry.ixpress.icicibank.com:5000/sonarqube:latest
       importPolicy: {}
       name: ${SONARQUBE_VERSION}
 - apiVersion: v1
