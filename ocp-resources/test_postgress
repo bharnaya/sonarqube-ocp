@@ -33,6 +33,7 @@ objects:
     labels:
       app: sonarqube
   spec:
+    host: sonarqube.apps.nonprod.iciciltd.com
     to:
       kind: Service
       name: sonarqube
