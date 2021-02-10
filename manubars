@@ -1,0 +1,11 @@
+common-api-functions-java-mvn-lib
+common-api-utils-java-mvn-lib
+common-unified-api-lib
+common-retry-policies 
+common-retry-lib
+common-circuitbreaker-policies
+eCollection_Message_Holding_DeemedActionQueyBack 
+eCollection_Message_Holding_APIGW
+eCollectionMessageHoldingCallBack
+eCollectionMessageHoldingCircuitBreaker 
+MockCollectionPlain
