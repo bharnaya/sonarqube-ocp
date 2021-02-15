@@ -7,7 +7,7 @@ metadata:
     app: release-name-postgresql
 type: Opaque
 data:  
-  postgres-password:  "sonardb"
+  postgres-password:  "c29uYXJQYXNz"
   
 
 ---
