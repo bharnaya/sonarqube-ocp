@@ -1,0 +1,29 @@
+# This PVC needs to be setup upfront, the name of this pvc is referenced inside values.yaml "persistence.existingClaim".
+# A minimum of 500 IOPS need to be given, otherwise postgres will fail to initialize
+apiVersion: v1
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: postgres-sonarqube
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+      iops: 500
+  storageClassName: ibmc-file-custom
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: blw-sonarqube
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+      iops: 500
+  storageClassName: ibmc-file-custom

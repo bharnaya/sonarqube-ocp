@@ -1,0 +1,426 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: release-name-postgresql
+  labels:
+    app: release-name-postgresql
+    chart: "postgresql-0.8.3"
+    release: "release-name"
+    heritage: "Tiller"
+type: Opaque
+data:
+  
+  postgres-password:  ""
+  
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-sonarqube-config
+  labels:
+    app: sonarqube
+data:
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-sonarqube-copy-plugins
+  labels:
+    app: sonarqube
+data:
+  copy_plugins.sh: |-
+      #!/bin/bash
+      for f in /opt/sonarqube/extensions/plugins/tmp/*.jar
+      do
+        file=${f##*/} && file=${file%-[0-9]*}
+        for original in /opt/sonarqube/extensions/plugins/*.jar
+        do
+          originalfile=${original##*/} && originalfile=${originalfile%-[0-9]*}
+          if [ "$originalfile" = "$file" ]; then
+            rm -f "$original"
+          fi
+        done
+      done
+      cp /opt/sonarqube/extensions/plugins/tmp/*.jar /opt/sonarqube/extensions/plugins/
+      /opt/sonarqube/bin/run.sh
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-sonarqube-install-plugins
+  labels:
+    app: sonarqube    
+data:
+  install_plugins.sh: |-
+    cd /opt/sonarqube/extensions/plugins/tmp
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-sonarqube-tests
+  labels:
+    app: sonarqube
+data:
+  run.sh: |-
+    @test "Testing Sonarqube UI is accessible" {
+      curl --connect-timeout 5 --retry 12 --retry-delay 1 --retry-max-time 60 release-name-sonarqube:9000/sessions/new
+    }
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-postgresql
+  labels:
+    app: release-name-postgresql
+spec:
+  type: ClusterIP
+  ports:
+  - name: postgresql
+    port: 5432
+    targetPort: postgresql
+  selector:
+    app: release-name-postgresql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-sonarqube
+  labels:
+    app: sonarqube
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9000
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: sonarqube
+    release: release-name
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "release-name-ui-test-m0wfk"
+  annotations:
+    "helm.sh/hook": test-success
+  labels:
+    app: sonarqube
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "dduportal/bats:0.4.0"
+      command:
+      - "bash"
+      - "-c"
+      - |
+        set -ex
+        # copy bats to tools dir
+        cp -R /usr/local/libexec/ /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: release-name-ui-test
+      image: sonarqube:7.9.2-community
+      command: ["/tools/bats/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: release-name-sonarqube-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "release-name-ui-test"
+  annotations:
+    "helm.sh/hook": test-success
+  labels:
+    app: sonarqube
+spec:
+  initContainers:
+    - name: "test-framework"
+      image: "dduportal/bats:0.4.0"
+      command:
+      - "bash"
+      - "-c"
+      - |
+        set -ex
+        # copy bats to tools dir
+        cp -R /usr/local/libexec/ /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
+  containers:
+    - name: release-name-ui-test
+      image: sonarqube:7.9.2-community
+      command: ["/tools/bats/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: release-name-sonarqube-tests
+  - name: tools
+    emptyDir: {}
+  restartPolicy: Never
+
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: release-name-postgresql
+  labels:
+    app: release-name-postgresql
+spec:
+  selector:
+    matchLabels:
+        app: release-name-postgresql
+  template:
+    metadata:
+      labels:
+        app: release-name-postgresql
+    spec:
+      containers:
+      - name: release-name-postgresql
+        image: "postgres:9.6.2"
+        imagePullPolicy: ""
+        env:
+        - name: POSTGRES_USER
+          value: "sonarUser"
+        - name: PGUSER
+          value: "sonarUser"
+        - name: POSTGRES_DB
+          value: "sonarDB"
+        - name: POSTGRES_INITDB_ARGS
+          value: ""
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: release-name-postgresql
+              key: postgres-password
+        - name: POD_IP
+          valueFrom: { fieldRef: { fieldPath: status.podIP } }
+        ports:
+        - name: postgresql
+          containerPort: 5432
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - exec pg_isready --host $POD_IP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - exec pg_isready --host $POD_IP
+          initialDelaySeconds: 5
+          timeoutSeconds: 3
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/postgresql/data/pgdata
+          subPath: postgresql-db
+      volumes:
+      - name: data
+        emptyDir: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-sonarqube
+  labels:
+    app: sonarqube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarqube
+      release: release-name
+  template:
+    metadata:
+      labels:
+        app: sonarqube
+        release: release-name
+
+    spec:
+      securityContext:
+        fsGroup: 999
+        
+      initContainers:
+        - name: chmod-volume-mounts
+          command:
+            - "sh"
+            - "-c"
+            - 'mkdir -p $(printf "/opt/sonarqube/${1-%s\n}" temp logs data extensions/downloads extensions/plugins/tmp extensions/plugins) &&
+               chown 999:999 -R $(printf "/opt/sonarqube/${1-%s\n}" temp logs data extensions/downloads extensions/plugins/tmp extensions/plugins)'
+          image: busybox:1.31
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+          volumeMounts:
+          - mountPath: /opt/sonarqube/temp
+            name: sonarqube
+            subPath: temp
+          - mountPath: /opt/sonarqube/logs
+            name: sonarqube
+            subPath: logs
+          - mountPath: /opt/sonarqube/data
+            name: sonarqube
+            subPath: data
+          - mountPath: /opt/sonarqube/extensions/plugins/tmp
+            name: sonarqube
+            subPath: tmp
+          - mountPath: /opt/sonarqube/extensions/downloads
+            name: sonarqube
+            subPath: downloads
+          - mountPath: /opt/sonarqube/extensions/plugins
+            name: sonarqube
+            subPath: plugins
+        - name: init-sysctl
+          image: busybox:1.31
+          command:
+          - sysctl
+          - -w
+          - vm.max_map_count=262144
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+      containers:
+        - name: sonarqube
+          image: "sonarqube:7.9.2-community"
+          imagePullPolicy: 
+          ports:
+            - name: http
+              containerPort: 9000
+              protocol: TCP
+          env:
+            - name: SONARQUBE_JDBC_USERNAME
+              value: "sonarUser"
+            - name: SONARQUBE_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: release-name-postgresql
+                  key: postgres-password
+            - name: SONARQUBE_JDBC_URL
+              value: "jdbc:postgresql://release-name-postgresql:5432/sonarDB"
+          livenessProbe:
+            httpGet:
+              path: /sessions/new
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /sessions/new
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 6
+          volumeMounts:
+            - mountPath: /opt/sonarqube/data
+              name: sonarqube
+              subPath: data
+            - mountPath: /opt/sonarqube/extensions/plugins/tmp
+              name: sonarqube
+              subPath: tmp
+            - mountPath: /opt/sonarqube/extensions/downloads
+              name: sonarqube
+              subPath: downloads
+            - mountPath: /opt/sonarqube/extensions/plugins
+              name: sonarqube
+              subPath: plugins
+            - mountPath: /opt/sonarqube/temp
+              name: sonarqube
+              subPath: temp
+            - mountPath: /opt/sonarqube/logs
+              name: sonarqube
+              subPath: logs
+            - mountPath: /tmp
+              name: tmp-dir
+            - name: copy-plugins
+              mountPath: /tmp/scripts
+          resources:
+            {}
+            
+      volumes:
+      - name: install-plugins
+        configMap:
+          name: release-name-sonarqube-install-plugins
+          items:
+            - key: install_plugins.sh
+              path: install_plugins.sh
+      - name: copy-plugins
+        configMap:
+          name: release-name-sonarqube-copy-plugins
+          defaultMode: 0755
+          items:
+            - key: copy_plugins.sh
+              path: copy_plugins.sh
+      - name: sonarqube
+        emptyDir: {}
+      - name : tmp-dir
+        emptyDir: {}
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: release-name-sonarqube
+  labels:
+    app: sonarqube
+  annotations:
+    ingress.bluemix.net/redirect-to-https: "True"
+spec:
+  rules:
+    - host: 
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: release-name-sonarqube
+              servicePort: 9000
+          - path: /*
+            backend:
+              serviceName: release-name-sonarqube
+              servicePort: 9000
+  tls:
+    - hosts:
+      - 
+      secretName: 
+
