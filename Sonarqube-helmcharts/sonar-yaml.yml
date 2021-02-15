@@ -398,29 +398,18 @@ spec:
         emptyDir: {}
 
 ---
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
+apiVersion: apps/v1
+kind: Route
 metadata:
   name: release-name-sonarqube
   labels:
     app: sonarqube
-  annotations:
-    ingress.bluemix.net/redirect-to-https: "True"
 spec:
-  rules:
+  host: sonar.apps.nonprod.iciciltd.com
     - host: 
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: release-name-sonarqube
-              servicePort: 9000
-          - path: /*
-            backend:
-              serviceName: release-name-sonarqube
-              servicePort: 9000
-  tls:
-    - hosts:
-      - 
-      secretName: 
-
+      port:
+      targetPort: 8081-tcp
+    to:
+      kind: Service
+      name: release-name-sonarqube
+      weight: 100
