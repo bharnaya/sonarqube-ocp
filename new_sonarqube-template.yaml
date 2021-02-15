@@ -12,7 +12,7 @@ parameters:
   value: sonarqube
   required: true
 - displayName: SonarQube version
-  value: "6.7"
+  value: "8.2-community"
   name: SONARQUBE_VERSION
   required: true
 metadata:
