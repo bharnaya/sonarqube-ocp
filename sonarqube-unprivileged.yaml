@@ -112,7 +112,7 @@ objects:
             value: ${DB_USERNAME}
           - name: SONARQUBE_JDBC_PASSWORD
             value: ${DB_PASSWORD}
-          image: ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_VERSION}
+          image: registry.ixpress.icicibank.com:5000/sonarqube:latest
           imagePullPolicy: IfNotPresent
           name: ${APPLICATION_NAME}
           ports:
@@ -267,7 +267,7 @@ parameters:
   displayName: Version of PostgreSQL Image
   name: POSTGRESQL_VERSION
   required: true
-  value: "9.5"
+  value: "9.6"
 - description: The OpenShift Namespace where the PostgreSQL ImageStream resides.
   displayName: Namespace
   name: NAMESPACE
