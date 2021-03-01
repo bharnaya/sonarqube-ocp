@@ -1,0 +1,111 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: 2021-02-11T03:22:00Z
+  generation: 1
+  labels:
+    app: ace-mq
+  name: ace-mq
+  namespace: bharathi-testing
+  resourceVersion: "139520987"
+  selfLink: /apis/apps.openshift.io/v1/namespaces/bharathi-testing/deploymentconfigs/ace-mq
+  uid: 4ddd4a8a-6c18-11eb-a1b8-000d3af20c19
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: ace-mq
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        app: ace-mq
+      name: ace-mq
+    spec:
+      containers:
+      - env:
+        - name: LICENSE
+          value: accept
+        - name: USE_QMGR
+          value: "false"
+        - name: ACE_SERVER_NAME
+          value: ACESERVER
+        - name: LOG_FORMAT
+          value: json
+        - name: ACE_ENABLE_METRICS
+          value: "true"
+        - name: MQ_QMGR_NAME
+          value: QMGR
+        image: ibmcom/ace-mq
+        imagePullPolicy: Always
+        name: ace-mq
+        ports:
+        - containerPort: 7800
+          protocol: TCP
+        - containerPort: 7843
+          protocol: TCP
+        - containerPort: 9157
+          protocol: TCP
+        - containerPort: 9443
+          protocol: TCP
+        - containerPort: 9483
+          protocol: TCP
+        - containerPort: 1414
+          protocol: TCP
+        - containerPort: 7600
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - type: ConfigChange
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: 2021-02-11T03:22:21Z
+    lastUpdateTime: 2021-02-11T03:22:21Z
+    message: replication controller "ace-mq-1" successfully rolled out
+    reason: NewReplicationControllerAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: 2021-02-24T17:44:16Z
+    lastUpdateTime: 2021-02-24T17:44:16Z
+    message: Deployment config has minimum availability.
+    status: "True"
+    type: Available
+  details:
+    causes:
+    - type: ConfigChange
+    message: config change
+  latestVersion: 1
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  unavailableReplicas: 0
+  updatedReplicas: 1

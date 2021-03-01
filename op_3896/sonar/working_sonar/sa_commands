@@ -1,0 +1,7 @@
+oc create -f ocp-resources/postgresql-pv.yaml
+oc create -f ocp-resources/sonar-pv.yam
+oc create -f ocp-resources/sonarqube-postgresql-template.yaml -n openshift
+oc new-app sonarqube-postgresql
+oc create sa postgres
+oc adm policy add-scc-to-user privileged  -z postgres
+

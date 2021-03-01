@@ -1,0 +1,59 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    openshift.io/node-selector: type=ibsi-xc-dev-mgmt02
+  labels:
+    app: jenkins-with-tools
+  name: jenkins-with-tools
+  namespace: devops
+  selfLink: /apis/apps.openshift.io/v1/namespaces/devops/deploymentconfigs/jenkins-with-tools
+spec:
+  replicas: 1
+  selector:
+    app: jenkins-with-tools
+    deploymentconfig: jenkins-with-tools
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      labels:
+        app: jenkins-with-tools
+        deploymentconfig: jenkins-with-tools
+    spec:
+      containers:
+      - image: registry.ixpress.icicibank.com:5000/jenkins/jenkins-with-tools:latest
+        imagePullPolicy: Always
+        name: jenkins-with-tools
+        ports:
+        - containerPort: 50000
+          protocol: TCP
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: jenkins-with-tools-volume-1
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - emptyDir: {}
+        name: jenkins-with-tools-volume-1
+  test: false
+  triggers:
+  - type: ConfigChange

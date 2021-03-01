@@ -1,0 +1,26 @@
+oc get pod nonprod-mongo-new-6c68f85c8-2msxr -o yaml
+oc get pvc mongo-db-new  -o ymal
+
+storageClassName: azuredisk-premium
+
+
+
+ volumes:
+  - name: volume-bpmoe
+    persistentVolumeClaim:
+      claimName: mongo-db-ixc2
+  - name: volume-9rkcc
+    persistentVolumeClaim:
+      claimName: mongo-config-ixc2
+
+
+i
+
+
+      - name: volume-bpmoe
+        persistentVolumeClaim:
+          claimName: mongo-db-ixc2
+      - name: volume-9rkcc
+        persistentVolumeClaim:
+          claimName: mongo-config-ixc2
+oc delete pvc mongo-config-ixc2  mongo-db-ixc2:wq

@@ -1,0 +1,12 @@
+git clone http://nonprod-gitea.apps.nonprod.iciciltd.com/ixc-ace-eCollection-template/common-api-functions-java-mvn-lib.git
+git clone http://nonprod-gitea.apps.nonprod.iciciltd.com/ixc-ace-eCollection-template/common-api-utils-java-mvn-lib.git
+git clone http://nonprod-gitea.apps.nonprod.iciciltd.com/ixc-ace-eCollection-template/common-unified-api-lib.git
+git clone http://nonprod-gitea.apps.nonprod.iciciltd.com/ixc-ace-eCollection-template/common-retry-policies .git
+git clone http://nonprod-gitea.apps.nonprod.iciciltd.com/ixc-ace-eCollection-template/common-retry-lib.git
+git clone http://nonprod-gitea.apps.nonprod.iciciltd.com/ixc-ace-eCollection-template/common-circuitbreaker-policies.git
+git clone http://nonprod-gitea.apps.nonprod.iciciltd.com/ixc-ace-eCollection-template/eCollection_Message_Holding_DeemedActionQueyBack .git
+git clone http://nonprod-gitea.apps.nonprod.iciciltd.com/ixc-ace-eCollection-template/eCollection_Message_Holding_APIGW.git
+git clone http://nonprod-gitea.apps.nonprod.iciciltd.com/ixc-ace-eCollection-template/eCollectionMessageHoldingCallBack.git
+git clone http://nonprod-gitea.apps.nonprod.iciciltd.com/ixc-ace-eCollection-template/eCollectionMessageHoldingCircuitBreaker .git
+git clone http://nonprod-gitea.apps.nonprod.iciciltd.com/ixc-ace-eCollection-template/MockCollectionPlain.git
+git clone http://nonprod-gitea.apps.nonprod.iciciltd.com/ixc-ace-eCollection-template/eCollection_Message_Holding_IPS_FileProcessor.git

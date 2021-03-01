@@ -1,0 +1,81 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: 2021-02-19T14:01:08Z
+  generation: 1
+  labels:
+    app: ixc-httpd
+  name: ixc-httpd
+  namespace: ixc-dev
+  resourceVersion: "135841296"
+  selfLink: /apis/apps.openshift.io/v1/namespaces/ixc-dev/deploymentconfigs/ixc-httpd
+  uid: ea30ab47-72ba-11eb-9dfa-000d3af2f6a6
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: ixc-httpd
+    deploymentconfig: ixc-httpd
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        app: ixc-httpd
+        deploymentconfig: ixc-httpd
+    spec:
+      containers:
+      - image: registry.ixpress.icicibank.com:5000/ixc-httpd:2.4
+        imagePullPolicy: IfNotPresent
+        name: ixc-httpd
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - type: ConfigChange
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: 2021-02-19T14:01:28Z
+    lastUpdateTime: 2021-02-19T14:01:28Z
+    message: Deployment config has minimum availability.
+    status: "True"
+    type: Available
+  - lastTransitionTime: 2021-02-19T14:01:30Z
+    lastUpdateTime: 2021-02-19T14:01:30Z
+    message: replication controller "ixc-httpd-1" successfully rolled out
+    reason: NewReplicationControllerAvailable
+    status: "True"
+    type: Progressing
+  details:
+    causes:
+    - type: ConfigChange
+    message: config change
+  latestVersion: 1
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  unavailableReplicas: 0
+  updatedReplicas: 1

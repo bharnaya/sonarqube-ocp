@@ -1,0 +1,123 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","metadata":{"annotations":{"openshift.io/generated-by":"OpenShiftWebConsole"},"creationTimestamp":"2020-07-27T09:47:38Z","generation":7,"labels":{"app":"nonprod-jenkins"},"name":"nonprod-jenkins","namespace":"non-production","resourceVersion":"71139413","selfLink":"/apis/apps.openshift.io/v1/namespaces/non-production/deploymentconfigs/nonprod-jenkins","uid":"350495ee-cfee-11ea-b341-000d3af20c19"},"spec":{"replicas":1,"revisionHistoryLimit":10,"selector":{"app":"nonprod-jenkins","deploymentconfig":"nonprod-jenkins"},"strategy":{"activeDeadlineSeconds":21600,"resources":{},"rollingParams":{"intervalSeconds":1,"maxSurge":"25%","maxUnavailable":"25%","timeoutSeconds":600,"updatePeriodSeconds":1},"type":"Rolling"},"template":{"metadata":{"annotations":{"openshift.io/generated-by":"OpenShiftWebConsole"},"creationTimestamp":null,"labels":{"app":"nonprod-jenkins","deploymentconfig":"nonprod-jenkins"}},"spec":{"containers":[{"image":"registry.ixpress.icicibank.com:5000/jenkins/jenkins","imagePullPolicy":"Always","name":"nonprod-jenkins","ports":[{"containerPort":8080,"protocol":"TCP"},{"containerPort":50000,"protocol":"TCP"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","volumeMounts":[{"mountPath":"/var/jenkins_home","name":"volume-en8v1"}]}],"dnsPolicy":"ClusterFirst","hostAliases":[{"hostnames":["ocp-master.nonprod.iciciltd.com"],"ip":"172.19.65.102"},{"hostnames":["nonprod-jenkins.apps.nonprod.iciciltd.com"],"ip":"172.19.65.72"},{"hostnames":["nonprod-gitea.apps.nonprod.iciciltd.com"],"ip":"172.19.65.72"},{"hostnames":["icici-server15.apps.nonprod.iciciltd.com"],"ip":"172.19.65.72"},{"hostnames":["manager.icp-proxy.apps.nonprod.iciciltd.com"],"ip":"172.19.65.72"},{"hostnames":["manager.apps.nonprod.iciciltd.com"],"ip":"172.19.65.72"}],"restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"terminationGracePeriodSeconds":30,"volumes":[{"name":"volume-en8v1","persistentVolumeClaim":{"claimName":"prod-jenkins-storage"}}]}},"test":false,"triggers":[{"type":"ConfigChange"}]},"status":{"availableReplicas":0,"conditions":[{"lastTransitionTime":"2020-07-27T09:47:42Z","lastUpdateTime":"2020-07-27T09:47:55Z","message":"replication controller \"nonprod-jenkins-1\" successfully rolled out","reason":"NewReplicationControllerAvailable","status":"True","type":"Progressing"},{"lastTransitionTime":"2020-09-22T13:49:17Z","lastUpdateTime":"2020-09-22T13:49:17Z","message":"Deployment config does not have minimum availability.","status":"False","type":"Available"}],"details":{"causes":[{"type":"ConfigChange"}],"message":"config change"},"latestVersion":1,"observedGeneration":7,"replicas":1,"unavailableReplicas":1,"updatedReplicas":1}}
+    openshift.io/generated-by: OpenShiftWebConsole
+  creationTimestamp: 2020-09-22T18:46:52Z
+  generation: 19
+  labels:
+    app: nonprod-jenkins
+  name: nonprod-jenkins
+  namespace: non-production
+  resourceVersion: "137875503"
+  selfLink: /apis/apps.openshift.io/v1/namespaces/non-production/deploymentconfigs/nonprod-jenkins
+  uid: faad6711-fd03-11ea-a2f6-000d3af20c19
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: nonprod-jenkins
+    deploymentconfig: nonprod-jenkins
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+      creationTimestamp: null
+      labels:
+        app: nonprod-jenkins
+        deploymentconfig: nonprod-jenkins
+    spec:
+      containers:
+      - image: registry.ixpress.icicibank.com:5000/jenkins/ixc-jenkins
+        imagePullPolicy: Always
+        name: nonprod-jenkins
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 50000
+          protocol: TCP
+        resources: {}
+        securityContext:
+          privileged: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: volume-en8v1
+        - mountPath: /var/run/docker.sock
+          name: volume-dockersock
+      dnsPolicy: ClusterFirst
+      hostAliases:
+      - hostnames:
+        - ocp-master.nonprod.iciciltd.com
+        ip: 172.19.65.102
+      - hostnames:
+        - nonprod-jenkins.apps.nonprod.iciciltd.com
+        ip: 172.19.65.72
+      - hostnames:
+        - nonprod-gitea.apps.nonprod.iciciltd.com
+        ip: 172.19.65.72
+      - hostnames:
+        - icici-server15.apps.nonprod.iciciltd.com
+        ip: 172.19.65.72
+      - hostnames:
+        - manager.icp-proxy.apps.nonprod.iciciltd.com
+        ip: 172.19.65.72
+      - hostnames:
+        - manager.apps.nonprod.iciciltd.com
+        ip: 172.19.65.72
+      nodeSelector:
+        kubernetes.io/hostname: ibsi-xc-dev-mgmt02
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: nonprod-jenkins-docker
+      serviceAccountName: nonprod-jenkins-docker
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: volume-en8v1
+        persistentVolumeClaim:
+          claimName: prod-jenkins-storage-nfs
+      - hostPath:
+          path: /var/run/docker.sock
+          type: File
+        name: volume-dockersock
+  test: false
+  triggers:
+  - type: ConfigChange
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: 2021-02-22T14:07:04Z
+    lastUpdateTime: 2021-02-22T14:07:04Z
+    message: Deployment config has minimum availability.
+    status: "True"
+    type: Available
+  - lastTransitionTime: 2021-02-22T16:06:28Z
+    lastUpdateTime: 2021-02-22T16:06:32Z
+    message: replication controller "nonprod-jenkins-11" successfully rolled out
+    reason: NewReplicationControllerAvailable
+    status: "True"
+    type: Progressing
+  details:
+    causes:
+    - type: ConfigChange
+    message: config change
+  latestVersion: 11
+  observedGeneration: 19
+  readyReplicas: 1
+  replicas: 1
+  unavailableReplicas: 0
+  updatedReplicas: 1

@@ -1,0 +1,15 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  labels:
+    app: ace-mh
+  name: ace-mh
+spec:
+  host: ace-mh-ibm-dev.apps.nonprod.iciciltd.com
+  port:
+    targetPort: port-1
+  to:
+    kind: Service
+    name: ace-mh

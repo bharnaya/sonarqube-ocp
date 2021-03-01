@@ -1,0 +1,32 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: 2021-02-24T12:02:55Z
+  labels:
+    app: sonarqube-postgresql
+    template: sonarqube-postgresql-template
+  name: sonar
+  namespace: devops
+  resourceVersion: "139426893"
+  selfLink: /apis/route.openshift.io/v1/namespaces/devops/routes/sonar
+  uid: 3a6e42cb-7698-11eb-995a-000d3af2f6a6
+spec:
+  host: sonarqube.apps.nonprod.iciciltd.com
+  to:
+    kind: Service
+    name: sonar
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+  - conditions:
+    - lastTransitionTime: 2021-02-24T12:16:39Z
+      message: a route in another namespace holds host sonarqube.apps.nonprod.iciciltd.com
+      reason: HostAlreadyClaimed
+      status: "False"
+      type: Admitted
+    host: sonarqube.apps.nonprod.iciciltd.com
+    routerName: router
+    wildcardPolicy: None

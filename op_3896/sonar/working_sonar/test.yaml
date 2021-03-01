@@ -1,0 +1,10 @@
+kind: PersistentVolumeClaim
+metadata:
+ name: 
+spec:
+ accessModes:
+   - ReadWriteOnce
+ storageClassName: azuredisk-premium
+ resources:
+  requests:
+   storage: 1Gi

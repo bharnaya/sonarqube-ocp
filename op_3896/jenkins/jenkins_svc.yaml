@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ixc-jenkins
+  name: ixc-jenkins
+spec:
+  ports:
+  - name: port-1
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: port-2
+    port: 50000
+    protocol: TCP
+    targetPort: 50000
+  selector:
+    app: ixc-jenkins
+    deploymentconfig: ixc-jenkins

@@ -1,0 +1,20 @@
+oc logs -f --tail=200 ace-sit-ecollection-858d79b9d-kfh6j -n ixc-dev
+oc logs -f ace-sit-ecollection-858d79b9d-dbnnc
+ history
+oc get pod -o wide
+ oc get nodes
+oc adm manage-node ibsi-xc-dev-worker01 ibsi-xc-dev-worker02 ibsi-xc-dev-mgmt03
+oc adm manage-node ibsi-xc-dev-worker01 ibsi-xc-dev-worker02 ibsi-xc-dev-mgmt03  --schedulable=false
+ ocget pods
+ oc get pods
+oc delete pod ace-sit-ecollection-858d79b9d-dbnnc
+
+df -h 
+free -m 
+#journalctl --vacuum-size=50M  weekly run this commands
+sh /root/login.sh
+oc get node
+
+oc create sa postgres
+oc adm policy add-scc-to-user privileged  -z postgres
+

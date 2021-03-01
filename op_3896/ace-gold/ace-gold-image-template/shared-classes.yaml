@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: shared-classes
+spec:
+ accessModes:
+   - ReadWriteOnce
+ storageClassName: azurefile-ecollection
+ resources:
+  requests:
+   storage: 10Gi

@@ -1,0 +1,99 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: 2021-02-20T17:49:52Z
+  generation: 18
+  labels:
+    app: ixc-jenkins
+  name: ixc-jenkins
+  namespace: sonar
+  resourceVersion: "137129969"
+  selfLink: /apis/apps.openshift.io/v1/namespaces/sonar/deploymentconfigs/ixc-jenkins
+  uid: 08927855-73a4-11eb-9dfa-000d3af2f6a6
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: ixc-jenkins
+    deploymentconfig: ixc-jenkins
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        app: ixc-jenkins
+        deploymentconfig: ixc-jenkins
+    spec:
+      containers:
+      - image: registry.ixpress.icicibank.com:5000/jenkins/ixc-jenkins:latest
+        imagePullPolicy: Always
+        name: ixc-jenkins
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 50000
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: ixc-jenkins-volume-1
+        - mountPath: /var/run/docker.sock
+          name: volume-x6wnp
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        kubernetes.io/hostname: ibsi-xc-dev-mgmt02
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: ixc-jenkins-docker
+      serviceAccountName: ixc-jenkins-docker
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - emptyDir: {}
+        name: ixc-jenkins-volume-1
+      - hostPath:
+          path: /var/run/docker.sock
+          type: File
+        name: volume-x6wnp
+  test: false
+  triggers:
+  - type: ConfigChange
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: 2021-02-21T17:54:01Z
+    lastUpdateTime: 2021-02-21T17:54:01Z
+    message: Deployment config has minimum availability.
+    status: "True"
+    type: Available
+  - lastTransitionTime: 2021-02-21T18:13:19Z
+    lastUpdateTime: 2021-02-21T18:13:24Z
+    message: replication controller "ixc-jenkins-11" successfully rolled out
+    reason: NewReplicationControllerAvailable
+    status: "True"
+    type: Progressing
+  details:
+    causes:
+    - type: ConfigChange
+    message: config change
+  latestVersion: 11
+  observedGeneration: 18
+  readyReplicas: 1
+  replicas: 1
+  unavailableReplicas: 0
+  updatedReplicas: 1

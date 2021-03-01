@@ -1,0 +1,5 @@
+oc get pvc       ace-dev-ace-ecollection-logs-pvc
+oc get pvc       ace-dev-ace-ecollection-run-pvc
+oc get pvc       ace-dev-ace-ecollection-overrides-pvc
+oc get pvc       ace-dev-ace-ecollection-shared-classes-pvc
+oc get pvc       ace-dev-ace-ecollection-data-pvc-nfs

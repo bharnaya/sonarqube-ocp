@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: build
+spec:
+ accessModes:
+   - ReadWriteOnce
+ storageClassName: azurefile-ecollection
+ resources:
+  requests:
+   storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: logs
+spec:
+ accessModes:
+   - ReadWriteOnce
+ storageClassName: azurefile-ecollection
+ resources:
+  requests:
+   storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: run
+spec:
+ accessModes:
+   - ReadWriteOnce
+ storageClassName: azurefile-ecollection
+ resources:
+  requests:
+   storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: overrides
+spec:
+ accessModes:
+   - ReadWriteOnce
+ storageClassName: azurefile-ecollection
+ resources:
+  requests:
+   storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: shared-classes
+spec:
+ accessModes:
+   - ReadWriteOnce
+ storageClassName: azurefile-ecollection
+ resources:
+  requests:
+   storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: data
+spec:
+ accessModes:
+   - ReadWriteOnce
+ storageClassName: azurefile-ecollection
+ resources:
+  requests:
+   storage: 10Gi

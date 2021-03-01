@@ -1,0 +1,101 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: 2021-02-23T14:47:13Z
+  generation: 5
+  labels:
+    app: ixc-jenkins
+  name: ixc-jenkins
+  namespace: non-production
+  resourceVersion: "140841398"
+  selfLink: /apis/apps.openshift.io/v1/namespaces/non-production/deploymentconfigs/ixc-jenkins
+  uid: 03f3776f-75e6-11eb-b5cc-000d3af20c19
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: ixc-jenkins
+    deploymentconfig: ixc-jenkins
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        app: ixc-jenkins
+        deploymentconfig: ixc-jenkins
+    spec:
+      containers:
+      - image: registry.ixpress.icicibank.com:5000/jenkins/jenkins-with-tools:latest
+        imagePullPolicy: Always
+        name: ixc-jenkins
+        ports:
+        - containerPort: 50000
+          protocol: TCP
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        securityContext:
+          privileged: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: ixc-jenkins-volume-1
+        - mountPath: /var/run/docker.sock
+          name: volume-dockersock
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        kubernetes.io/hostname: ibsi-xc-dev-mgmt02
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: ixc-jenkins-sa
+      serviceAccountName: ixc-jenkins-sa
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: ixc-jenkins-volume-1
+        persistentVolumeClaim:
+          claimName: ixc-jenkins-storage-nfs
+      - hostPath:
+          path: /var/run/docker.sock
+          type: File
+        name: volume-dockersock
+  test: false
+  triggers:
+  - type: ConfigChange
+status:
+  availableReplicas: 0
+  conditions:
+  - lastTransitionTime: 2021-02-23T15:21:43Z
+    lastUpdateTime: 2021-02-23T15:21:48Z
+    message: replication controller "ixc-jenkins-5" successfully rolled out
+    reason: NewReplicationControllerAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: 2021-02-26T06:25:59Z
+    lastUpdateTime: 2021-02-26T06:25:59Z
+    message: Deployment config does not have minimum availability.
+    status: "False"
+    type: Available
+  details:
+    causes:
+    - type: ConfigChange
+    message: config change
+  latestVersion: 5
+  observedGeneration: 5
+  replicas: 1
+  unavailableReplicas: 1
+  updatedReplicas: 1

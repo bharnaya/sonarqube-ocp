@@ -1,0 +1,77 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: 2021-02-01T12:50:59Z
+  generation: 1
+  labels:
+    app: ixc2-mongo
+  name: ixc2-mongo
+  namespace: ixc-dev
+  resourceVersion: "137428373"
+  selfLink: /apis/extensions/v1beta1/namespaces/ixc-dev/deployments/ixc2-mongo
+  uid: 225152b4-648c-11eb-a1b8-000d3af20c19
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: ixc2-mongo
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ixc2-mongo
+    spec:
+      containers:
+      - image: registry.ixpress.icicibank.com:5000/mongo
+        imagePullPolicy: Always
+        name: icici-xpress-mongo
+        ports:
+        - containerPort: 27017
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /data/db
+          name: volume-bpmoe
+        - mountPath: /data/configdb
+          name: volume-9rkcc
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: volume-bpmoe
+        persistentVolumeClaim:
+          claimName: mongo-db-ixc2
+      - name: volume-9rkcc
+        persistentVolumeClaim:
+          claimName: mongo-config-ixc2
+status:
+  conditions:
+  - lastTransitionTime: 2021-02-01T12:50:59Z
+    lastUpdateTime: 2021-02-01T12:51:04Z
+    message: ReplicaSet "ixc2-mongo-96669f7c6" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: 2021-02-22T06:56:01Z
+    lastUpdateTime: 2021-02-22T06:56:01Z
+    message: Deployment does not have minimum availability.
+    reason: MinimumReplicasUnavailable
+    status: "False"
+    type: Available
+  observedGeneration: 1
+  replicas: 1
+  unavailableReplicas: 1
+  updatedReplicas: 1

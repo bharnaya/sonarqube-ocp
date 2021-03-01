@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: mongo-db-ixc2
+spec:
+ accessModes:
+   - ReadWriteOnce
+ storageClassName: azuredisk-premium
+ resources:
+  requests:
+   storage: 1Gi

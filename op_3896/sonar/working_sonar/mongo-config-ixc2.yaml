@@ -1,0 +1,10 @@
+kind: PersistentVolumeClaim
+metadata:
+ name: mongo-config-ixc2
+spec:
+ accessModes:
+   - ReadWriteOnce
+ storageClassName: azuredisk-premium
+ resources:
+  requests:
+   storage: 1Gi
